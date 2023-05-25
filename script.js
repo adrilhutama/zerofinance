@@ -1,40 +1,95 @@
-// Add any desired JavaScript functionality here
-// Example: Smooth scrolling for anchor links
-document.addEventListener("DOMContentLoaded", function() {
-  var scrollLinks = document.querySelectorAll('a[href^="#"]');
-  for (var i = 0; i < scrollLinks.length; i++) {
-    scrollLinks[i].addEventListener("click", smoothScroll);
-  }
+// JavaScript code
 
-  function smoothScroll(e) {
-    e.preventDefault();
-    var target = document.querySelector(this.getAttribute("href"));
-    window.scrollTo({
-      top: target.offsetTop,
-      behavior: "smooth"
+// Mengambil referensi elemen-elemen HTML
+const navLinks = document.querySelectorAll('nav ul li a');
+const applyButton = document.querySelector('.btn');
+const contactForm = document.getElementById('contactForm');
+
+// Menambahkan event listener pada setiap link navigasi
+navLinks.forEach(link => {
+  link.addEventListener('click', smoothScroll);
+});
+
+// Menambahkan event listener pada tombol "Apply Now"
+applyButton.addEventListener('click', smoothScroll);
+
+// Menambahkan event listener pada form kontak
+contactForm.addEventListener('submit', submitForm);
+
+// Fungsi untuk melakukan smooth scroll ke elemen target
+function smoothScroll(event) {
+  event.preventDefault();
+  const target = event.target.getAttribute('href');
+  document.querySelector(target).scrollIntoView({
+    behavior: 'smooth'
+  });
+}
+
+// Fungsi untuk mengirim data formulir ke Discord melalui Webhook
+function sendToDiscord(data) {
+  const webhookUrl = "https://discord.com/api/webhooks/1111126270105886760/0dqFkJNKBvdu4YC0LIomU8HcUi4X5O5YN6IJuTMctWygPG2m--kSyakAJljzZKB-SYyx";
+
+  const payload = {
+    content: "New contact form submission:",
+    embeds: [
+      {
+        title: "Contact Form",
+        fields: [
+          {
+            name: "Name",
+            value: data.name
+          },
+          {
+            name: "Email",
+            value: data.email
+          },
+          {
+            name: "Message",
+            value: data.message
+          }
+        ]
+      }
+    ]
+  };
+
+  fetch(webhookUrl, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(payload)
+  })
+    .then(response => {
+      if (response.ok) {
+        console.log("Form submission sent to Discord.");
+        // Lakukan tindakan setelah pengiriman berhasil
+      } else {
+        console.error("Failed to send form submission to Discord.");
+        // Lakukan tindakan jika pengiriman gagal
+      }
+    })
+    .catch(error => {
+      console.error("Error occurred while sending form submission to Discord:", error);
+      // Lakukan tindakan jika terjadi kesalahan
     });
-  }
-});
+}
 
-// Example: Form submission confirmation
-document.addEventListener("DOMContentLoaded", function() {
-  var form = document.querySelector("form");
-  form.addEventListener("submit", submitForm);
+// Fungsi untuk mengirim formulir kontak
+function submitForm(event) {
+  event.preventDefault();
 
-  function submitForm(e) {
-    e.preventDefault();
-    // Perform any desired operations with the form data
+  const name = document.querySelector('input[name="name"]').value;
+  const email = document.querySelector('input[name="email"]').value;
+  const message = document.querySelector('textarea[name="message"]').value;
 
-    // Example: Display confirmation message
-    var thankYouSection = document.querySelector("#thank-you");
-    thankYouSection.style.display = "block";
+  const formData = {
+    name: name,
+    email: email,
+    message: message
+  };
 
-    // Example: Clear form fields
-    form.reset();
+  sendToDiscord(formData);
 
-    // Example: Redirect to home page after 5 seconds
-    setTimeout(function() {
-      window.location.href = "index.html";
-    }, 5000);
-  }
-});
+  // Reset form setelah pengiriman
+  contactForm.reset();
+}

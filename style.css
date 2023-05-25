@@ -39,6 +39,11 @@ a {
   color: #fff;
   border: none;
   cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+  background-color: #555;
 }
 
 /* Header styles */
@@ -58,6 +63,11 @@ nav ul li {
 
 nav ul li a {
   color: #fff;
+  transition: color 0.3s ease;
+}
+
+nav ul li a:hover {
+  color: #ccc;
 }
 
 /* Home section styles */
@@ -88,6 +98,7 @@ nav ul li a {
 #services h2 {
   text-align: center;
   margin-bottom: 40px;
+  color: #333;
 }
 
 #services ul {
@@ -123,6 +134,12 @@ nav ul li a {
   padding: 10px;
   margin-bottom: 20px;
   border: 1px solid #ccc;
+  transition: border-color 0.3s ease;
+}
+
+#contact form input:focus,
+#contact form textarea:focus {
+  border-color: #555;
 }
 
 #contact form button {
@@ -133,6 +150,11 @@ nav ul li a {
   color: #fff;
   border: none;
   cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+#contact form button:hover {
+  background-color: #555;
 }
 
 /* Thank You page styles */
@@ -160,4 +182,23 @@ footer {
   color: #fff;
   padding: 10px;
   text-align: center;
+}
+
+/* Media queries for responsiveness */
+@media only screen and (max-width: 768px) {
+  .container {
+    padding: 10px;
+  }
+
+  #home h1 {
+    font-size: 28px;
+  }
+
+  #home p {
+    font-size: 16px;
+  }
+
+  #services li {
+    flex: 0 0 100%;
+  }
 }
